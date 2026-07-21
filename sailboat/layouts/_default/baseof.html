@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang | default "zh-cn" }}" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ block "title" . }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <link rel="icon" href="{{ .Site.Params.favicon | default "/favicon.ico" }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+
+  {{ if .IsHome }}<link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | absURL }}">{{ end }}
+
+  <!-- Fonts: Noto Sans (interface) + Noto Serif (content), 中英文 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap">
+
+  <!-- 防止主题闪烁：在渲染前设置主题 -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme') || '{{ .Site.Params.defaultTheme | default "dark" }}';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- 通过 Hugo Pipes 处理 CSS：压缩 + 指纹化 -->
+  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+  {{ block "head-extra" . }}{{ end }}
+</head>
+<body>
+  {{ partial "header.html" . }}
+  <div class="layout">
+    <main class="content" id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "sidebar.html" . }}
+  </div>
+  {{ partial "footer.html" . }}
+
+  {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+  <script defer src="{{ $js.RelPermalink }}"></script>
+</body>
+</html>

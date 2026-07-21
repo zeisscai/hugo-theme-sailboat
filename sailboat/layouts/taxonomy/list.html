@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <section class="list-content">
+    <header class="list-header card glass">
+      <h1 class="list-title">{{ .Title }}</h1>
+      <p class="list-description">浏览所有分类</p>
+    </header>
+
+    <div class="category-grid">
+      {{ range .Pages }}
+        <a class="category-card card glass" href="{{ .RelPermalink }}">
+          <h2 class="category-name">{{ .Title }}</h2>
+          <span class="category-count">{{ len .Pages }} 篇文章</span>
+        </a>
+      {{ else }}
+        <p class="empty-state">暂无分类</p>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

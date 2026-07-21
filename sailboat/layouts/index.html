@@ -1,0 +1,8 @@
+{{ define "main" }}
+  <section class="home-content card glass">
+    {{ with .Title }}<h1 class="page-title">{{ . }}</h1>{{ end }}
+    <article class="page-content">
+      {{ .Content }}
+    </article>
+  </section>
+{{ end }}

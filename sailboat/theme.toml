@@ -1,0 +1,12 @@
+name = "Sailboat"
+license = "MIT"
+licenselink = "https://opensource.org/license/mit"
+description = "A modern Hugo theme with glassmorphism and card layouts, dark-first."
+homepage = "https://example.org/"
+tags = ["blog", "dark", "responsive", "glassmorphism", "card"]
+features = ["responsive", "dark-mode", "search", "taxonomy", "glassmorphism"]
+min_version = "0.146.0"
+
+[author]
+  name = "Sailboat"
+  homepage = "https://example.org/"

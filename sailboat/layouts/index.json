@@ -1,0 +1,17 @@
+{{- $index := slice -}}
+{{- range .Site.RegularPages -}}
+  {{- if eq .Section "" }}{{ continue }}{{ end -}}
+  {{- $cats := slice -}}
+  {{- range .GetTerms "categories" -}}
+    {{- $cats = $cats | append .Title -}}
+  {{- end -}}
+  {{- $index = $index | append (dict
+    "title" (.Title | plainify)
+    "summary" (.Summary | plainify | truncate 160)
+    "permalink" .Permalink
+    "date" (.Date.Format "2006-01-02")
+    "categories" $cats
+    "section" .Section
+  ) -}}
+{{- end -}}
+{{- $index | jsonify (dict "indent" "  ") -}}
