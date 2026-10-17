@@ -66,7 +66,7 @@
 .app-icon {
   width: 48px; height: 48px; flex: 0 0 auto;
   border-radius: 12px;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--surface-solid);
   border: 1px solid var(--border);
 }
@@ -125,7 +125,7 @@
 .app-dl.open .app-dl-caret { transform: rotate(180deg); }
 
 .app-dl-menu {
-  position: absolute; left: 0; bottom: calc(100% + 8px);
+  position: absolute; right: 0; bottom: calc(100% + 8px);
   min-width: 148px; padding: 6px;
   display: flex; flex-direction: column; gap: 2px;
   background: var(--surface-solid);
