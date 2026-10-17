@@ -33,13 +33,13 @@
 
   {{ block "head-extra" . }}{{ end }}
 </head>
-<body>
+<body{{ if eq .Section "apps" }} class="is-apps"{{ end }}>
   {{ partial "header.html" . }}
-  <div class="layout">
+  <div class="layout{{ if eq .Section "apps" }} layout--full{{ end }}">
     <main class="content" id="main">
       {{ block "main" . }}{{ end }}
     </main>
-    {{ partial "sidebar.html" . }}
+    {{ if ne .Section "apps" }}{{ partial "sidebar.html" . }}{{ end }}
   </div>
   {{ partial "footer.html" . }}
 

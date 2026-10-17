@@ -1,0 +1,33 @@
+{{ define "head-extra" }}
+  {{- $css := resources.Get "css/apps.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ end }}
+
+{{ define "main" }}
+  {{- $data := site.Data.apps -}}
+  {{- $total := 0 -}}
+  {{- with $data }}{{ range .groups }}{{ $total = add $total (len .apps) }}{{ end }}{{ end -}}
+
+  <section class="apps-page">
+    <header class="apps-hero card glass">
+      <h1 class="apps-title">{{ .Title }}{{ if $total }}<span class="apps-count">{{ $total }} 款</span>{{ end }}</h1>
+      {{- with .Params.subtitle }}<p class="apps-subtitle">{{ . }}</p>{{ end }}
+      {{- with .Content }}<div class="apps-intro">{{ . }}</div>{{ end }}
+    </header>
+
+    {{- with $data }}
+      {{- range .groups }}
+      <section class="apps-group">
+        <h2 class="apps-group-title">{{ .name }}</h2>
+        <div class="apps-grid">
+          {{- range .apps }}
+          {{ partial "app-card.html" . }}
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    {{- else }}
+      <p class="empty-state">未找到应用数据。请在站点根目录创建 <code>data/apps.yaml</code>。</p>
+    {{- end }}
+  </section>
+{{ end }}

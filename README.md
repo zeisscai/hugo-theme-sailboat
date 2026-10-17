@@ -109,25 +109,109 @@ themes/sailboat/
 ├── theme.toml
 ├── README.md
 ├── assets/
-│   ├── css/main.css
+│   ├── css/
+│   │   ├── main.css
+│   │   └── apps.css          # 应用商店页专用，仅该页加载
 │   └── js/main.js
-└── layouts/
-    ├── _default/
-    │   ├── baseof.html
-    │   ├── single.html
-    │   └── list.html
-    ├── partials/
-    │   ├── header.html
-    │   ├── sidebar.html
-    │   ├── footer.html
-    │   ├── post-card.html
-    │   └── pagination.html
-    ├── taxonomy/
-    │   ├── list.html
-    │   └── term.html
-    ├── index.html
-    ├── index.json
-    └── 404.html
+├── layouts/
+│   ├── _default/
+│   │   ├── baseof.html
+│   │   ├── single.html
+│   │   └── list.html
+│   ├── apps/
+│   │   └── list.html         # 应用商店页模板
+│   ├── partials/
+│   │   ├── header.html
+│   │   ├── sidebar.html
+│   │   ├── footer.html
+│   │   ├── post-card.html
+│   │   ├── app-card.html     # 单个应用卡片
+│   │   └── pagination.html
+│   ├── taxonomy/
+│   │   ├── list.html
+│   │   └── term.html
+│   ├── index.html
+│   ├── index.json
+│   └── 404.html
+└── exampleSite/              # 可直接运行的演示站点
+    ├── hugo.toml
+    ├── data/apps.yaml
+    └── content/
+```
+
+## 应用商店页面
+
+主题内置 `/apps/` 应用商店页：卡片式网格，每个应用含图标、名称、简介，以及「直接下载」「前往官网」两个按钮。
+
+### 启用
+
+1. 在**站点根目录**创建 `content/apps/_index.md`：
+
+```markdown
+---
+title: "应用商店"
+subtitle: "常用软件集中管理，一处直达下载。"
+---
+
+这里可以写一段介绍，显示在标题下方。
+```
+
+2. 在**站点根目录**创建 `data/apps.yaml`（字段见下）。
+3. 在 `hugo.toml` 中加入导航入口：
+
+```toml
+[[menus.main]]
+  name = "应用"
+  url = "/apps/"
+  weight = 2
+```
+
+该页会自动隐藏侧栏并占满内容区宽度，无需额外配置。
+
+### 数据字段
+
+```yaml
+groups:
+  - name: 开发工具          # 分组名称
+    apps:
+      - name: Visual Studio Code
+        summary: 一句话简介，卡片内最多显示两行
+        site: https://code.visualstudio.com/        # 官网下载页
+        download: https://example.com/app-x64.exe   # 选填，文件直链
+        platform: Windows                            # 选填
+        version: 最新稳定版                           # 选填
+        icon: /icons/vscode.svg                      # 选填，留空回退首字母
+```
+
+`download` 留空时只渲染「前往官网」按钮。**不确定的直链不要填** —— 悬空的下载按钮比没有按钮更糟。
+
+### 关于下载链接
+
+`download` 支持三种形态：
+
+| 形态 | 示例 | 说明 |
+|---|---|---|
+| 固定直链 | `https://dl.example.com/app-1.2.3.exe` | 需随版本更新 |
+| 跳转链接 | `https://update.code.visualstudio.com/latest/win32-x64-user/stable` | 浏览器自动跟随 302，长期有效 |
+| 开源项目 | `https://github.com/owner/repo/releases/latest/download/app.exe` | 文件名稳定时可长期有效 |
+
+若官网下载地址由页面内 JavaScript 动态生成（含签名或时效参数），**纯前端无法可靠解析** —— 浏览器跨域策略会阻断对第三方站点的请求。此时只有两条路：改为指向官网下载页，或在构建阶段用 `resources.GetRemote` 抓取真实地址并配合定时重建。
+
+### 图标
+
+图标放在站点 `static/icons/` 下，`icon` 字段填 `/icons/xxx.svg`。留空时自动以应用名首字母渲染彩色方块作为占位，不影响布局。
+
+### 本地预览
+
+```bash
+cd exampleSite
+hugo server
+```
+
+`exampleSite/hugo.toml` 中的 `themesDir` 与 `theme` 依赖仓库目录名；若目录名不同，改用：
+
+```bash
+hugo server --themesDir ../.. --theme <你的目录名>
 ```
 
 ## 本地预览

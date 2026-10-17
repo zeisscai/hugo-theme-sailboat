@@ -1,0 +1,25 @@
+{{- $meta := slice -}}
+{{- with .platform }}{{ $meta = $meta | append . }}{{ end -}}
+{{- with .version }}{{ $meta = $meta | append . }}{{ end -}}
+<article class="app-card card glass">
+  <div class="app-card-head">
+    {{- with .icon }}
+    <img class="app-icon" src="{{ . | relURL }}" alt="" width="48" height="48" loading="lazy" decoding="async">
+    {{- else }}
+    <span class="app-icon app-icon--fallback" aria-hidden="true">{{ substr (trim .name " ") 0 1 }}</span>
+    {{- end }}
+    <div class="app-card-title">
+      <h3 class="app-name">{{ .name }}</h3>
+      {{- with $meta }}<p class="app-meta">{{ delimit . " · " }}</p>{{ end }}
+    </div>
+  </div>
+  {{- with .summary }}<p class="app-summary">{{ . }}</p>{{ end }}
+  <div class="app-actions">
+    {{- with .download }}
+    <a class="btn btn-primary btn-sm" href="{{ . }}" rel="noopener">直接下载</a>
+    {{- end }}
+    {{- with .site }}
+    <a class="btn btn-ghost btn-sm" href="{{ . }}" target="_blank" rel="noopener">前往官网</a>
+    {{- end }}
+  </div>
+</article>

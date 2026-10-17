@@ -6,6 +6,12 @@
     </a>
 
     <nav class="nav" aria-label="主导航" id="nav">
+      {{- if .Site.Menus.main }}
+        {{- range .Site.Menus.main }}
+        {{- $url := .URL | relURL }}
+        <a class="nav-item{{ if eq $url $.RelPermalink }} active{{ end }}" href="{{ $url }}"{{ if hasPrefix .URL "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Name }}</a>
+        {{- end }}
+      {{- else }}
       <a class="nav-item{{ if .IsHome }} active{{ end }}" href="{{ .Site.BaseURL }}">首页</a>
 
       {{ range .Site.Taxonomies.categories.Alphabetical }}
@@ -13,6 +19,7 @@
       {{ end }}
 
       <a class="nav-item{{ if eq .RelPermalink "/about/" }} active{{ end }}" href="{{ "/about/" | relURL }}">关于</a>
+      {{- end }}
 
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换深浅主题" title="切换主题">
         <svg class="icon icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">

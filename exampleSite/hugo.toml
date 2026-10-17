@@ -1,0 +1,44 @@
+baseURL = "https://example.org/"
+title = "Sailboat"
+
+# 让 exampleSite 直接引用上级目录的主题本体。
+# 若你把仓库 clone 成了其他目录名，请同步修改 theme 的值，
+# 或用命令行覆盖：hugo --themesDir .. --theme <仓库目录名>
+themesDir = "../.."
+theme = "sailboat-repo"
+defaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+  author = "zeisscai"
+  description = "一个现代、美观的 Hugo 主题"
+  favicon = "/favicon.ico"
+  defaultTheme = "dark"
+
+# 导航由 .Site.Menus.main 驱动；不配置时主题回退到内置导航
+[[menus.main]]
+  name = "首页"
+  url = "/"
+  weight = 1
+[[menus.main]]
+  name = "应用"
+  url = "/apps/"
+  weight = 2
+[[menus.main]]
+  name = "关于"
+  url = "/about/"
+  weight = 3
+
+[outputFormats]
+  [outputFormats.SearchIndex]
+    mediaType = "application/json"
+    baseName = "search"
+    isPlainText = true
+    notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "SearchIndex"]

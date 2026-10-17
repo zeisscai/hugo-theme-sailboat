@@ -1,0 +1,65 @@
+# =============================================================================
+# 应用商店数据源
+# 放在「站点根目录」的 data/apps.yaml，主题的 /apps/ 页面会自动读取
+# =============================================================================
+#
+# 应用字段说明：
+#   name      必填  应用名称
+#   summary   必填  一句话简介，卡片内最多显示两行
+#   site      必填  官网下载页地址 → 渲染「前往官网」按钮
+#   download  选填  文件直链       → 渲染「直接下载」按钮；留空则只显示官网按钮
+#   platform  选填  平台，如 Windows / macOS / 跨平台
+#   version   选填  版本号，与 platform 一同显示在名称下方
+#   icon      选填  图标路径，如 /icons/vscode.svg；留空回退为首字母方块
+#
+# 关于 download 字段的三种填法：
+#   1. 固定直链：https://example.com/app-1.2.3-x64.exe
+#   2. 跳转链接：https://example.com/download/latest  （浏览器自动跟随 302）
+#   3. 开源项目：https://github.com/owner/repo/releases/latest
+#      固定文件名可用 https://github.com/owner/repo/releases/latest/download/<文件名>
+# 不确定时请留空 —— 只显示官网按钮，好过给出失效链接。
+# =============================================================================
+
+groups:
+  - name: 开发工具
+    apps:
+      - name: Visual Studio Code
+        summary: 微软出品的免费代码编辑器，扩展生态丰富，内置 Git 与调试器，支持几乎所有主流语言。
+        site: https://code.visualstudio.com/
+        download: https://update.code.visualstudio.com/latest/win32-x64-user/stable
+        platform: Windows
+        version: 最新稳定版
+        icon: /icons/code.svg
+      - name: Git for Windows
+        summary: Windows 平台的 Git 客户端，附带 Git Bash 与图形化工具，版本控制必备。
+        site: https://git-scm.com/download/win
+        platform: Windows
+      - name: Windows Terminal
+        summary: 现代化终端应用，支持多标签、分屏、GPU 加速渲染与高度自定义主题。
+        site: https://github.com/microsoft/terminal/releases
+
+  - name: 效率工具
+    apps:
+      - name: Everything
+        summary: 基于 NTFS 索引的极速文件搜索工具，百万级文件秒级定位，常驻内存极低。
+        site: https://www.voidtools.com/downloads/
+        platform: Windows
+      - name: PowerToys
+        summary: 微软官方出品的系统增强套件，内含窗口布局、批量重命名、取色器等十余个实用模块。
+        site: https://github.com/microsoft/PowerToys/releases
+        platform: Windows
+      - name: 7-Zip
+        summary: 开源压缩软件，支持 7z、ZIP、RAR 等主流格式，压缩率高且完全免费。
+        site: https://www.7-zip.org/download.html
+        platform: 跨平台
+
+  - name: 设计与写作
+    apps:
+      - name: Figma
+        summary: 浏览器端协作式界面设计工具，多人实时编辑，组件与设计规范管理能力强。
+        site: https://www.figma.com/downloads/
+        platform: 跨平台
+      - name: Obsidian
+        summary: 基于本地 Markdown 文件的笔记工具，双向链接构建知识网络，数据完全自主掌控。
+        site: https://obsidian.md/download
+        platform: 跨平台
