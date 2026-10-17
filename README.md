@@ -22,13 +22,13 @@
 将本主题放入 Hugo 项目的 `themes/` 目录：
 
 ```bash
-git clone https://github.com/your-name/sailboat themes/sailboat
+git clone https://github.com/zeisscai/hugo-theme-sailboat themes/sailboat
 ```
 
 或在项目目录下作为子模块：
 
 ```bash
-git submodule add https://github.com/your-name/sailboat themes/sailboat
+git submodule add https://github.com/zeisscai/hugo-theme-sailboat themes/sailboat
 ```
 
 ## 配置
