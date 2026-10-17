@@ -111,15 +111,17 @@ themes/sailboat/
 ├── assets/
 │   ├── css/
 │   │   ├── main.css
-│   │   └── apps.css          # 应用商店页专用，仅该页加载
-│   └── js/main.js
+│   │   └── apps.css          # 软件中心页专用，仅该页加载
+│   └── js/
+│       ├── main.js
+│       └── apps.js           # 下载菜单的触摸与键盘支持
 ├── layouts/
 │   ├── _default/
 │   │   ├── baseof.html
 │   │   ├── single.html
 │   │   └── list.html
 │   ├── apps/
-│   │   └── list.html         # 应用商店页模板
+│   │   └── list.html         # 软件中心页模板
 │   ├── partials/
 │   │   ├── header.html
 │   │   ├── sidebar.html
@@ -139,9 +141,9 @@ themes/sailboat/
     └── content/
 ```
 
-## 应用商店页面
+## 软件中心页面
 
-主题内置 `/apps/` 应用商店页：卡片式网格，每个应用含图标、名称、简介，以及「直接下载」「前往官网」两个按钮。
+主题内置 `/apps/` 软件中心页：卡片式网格，每个应用含图标、名称、系统标签、简介，以及「直接下载」「前往官网」两个按钮。
 
 ### 启用
 
@@ -149,7 +151,7 @@ themes/sailboat/
 
 ```markdown
 ---
-title: "应用商店"
+title: "软件中心"
 subtitle: "常用软件集中管理，一处直达下载。"
 ---
 
@@ -161,7 +163,7 @@ subtitle: "常用软件集中管理，一处直达下载。"
 
 ```toml
 [[menus.main]]
-  name = "应用"
+  name = "软件中心"
   url = "/apps/"
   weight = 2
 ```
@@ -172,30 +174,42 @@ subtitle: "常用软件集中管理，一处直达下载。"
 
 ```yaml
 groups:
-  - name: 开发工具          # 分组名称
+  - name: 浏览器                 # 分组名称
     apps:
-      - name: Visual Studio Code
+      - name: Google Chrome
         summary: 一句话简介，卡片内最多显示两行
-        site: https://code.visualstudio.com/        # 官网下载页
-        download: https://example.com/app-x64.exe   # 选填，文件直链
-        platform: Windows                            # 选填
-        version: 最新稳定版                           # 选填
-        icon: /icons/vscode.svg                      # 选填，留空回退首字母
+        site: https://www.google.com/chrome/      # 官网
+        icon: /icons/chrome.svg                   # 选填，留空回退首字母
+        platforms:                                # 该应用支持的系统
+          - os: Windows
+            url: https://dl.google.com/chrome/install/latest/chrome_installer.exe
+          - os: macOS
+            url: https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg
+          - os: Linux
+            url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 ```
 
-`download` 留空时只渲染「前往官网」按钮。**不确定的直链不要填** —— 悬空的下载按钮比没有按钮更糟。
+### 平台标签与下载按钮
+
+`os` 会渲染为卡片标题下方的平台标签。下载按钮的行为由数据自动决定：
+
+| 情形 | 表现 |
+|---|---|
+| 只有一个平台 | 「直接下载」直接跳转该地址 |
+| 多平台，且各平台地址不同 | 悬浮（或点击）展开平台菜单，点选后跳转 |
+| 多平台，但地址都相同 | 不展开菜单，直接跳转 —— 避免三个菜单项指向同一处 |
 
 ### 关于下载链接
 
-`download` 支持三种形态：
+`url` 可以是安装包直链，也可以是官方下载页，三种常用形态：
 
 | 形态 | 示例 | 说明 |
 |---|---|---|
-| 固定直链 | `https://dl.example.com/app-1.2.3.exe` | 需随版本更新 |
-| 跳转链接 | `https://update.code.visualstudio.com/latest/win32-x64-user/stable` | 浏览器自动跟随 302，长期有效 |
-| 开源项目 | `https://github.com/owner/repo/releases/latest/download/app.exe` | 文件名稳定时可长期有效 |
+| 稳定直链 | `https://update.code.visualstudio.com/latest/win32-x64-user/stable` | 官方维护的「最新版」地址，长期有效 |
+| 平台直链 | `https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb` | 各平台分别有固定路径 |
+| 下载页 | `https://github.com/owner/repo/releases/latest` | 无稳定文件名时的兜底 |
 
-若官网下载地址由页面内 JavaScript 动态生成（含签名或时效参数），**纯前端无法可靠解析** —— 浏览器跨域策略会阻断对第三方站点的请求。此时只有两条路：改为指向官网下载页，或在构建阶段用 `resources.GetRemote` 抓取真实地址并配合定时重建。
+若官网下载地址由页面内 JavaScript 动态生成（含签名或时效参数），**纯前端无法可靠解析** —— 浏览器跨域策略会阻断对第三方站点的请求。此时只有两条路：指向官方下载页，或在构建阶段用 `resources.GetRemote` 抓取真实地址并配合定时重建。
 
 ### 图标
 

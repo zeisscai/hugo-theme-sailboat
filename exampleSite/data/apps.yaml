@@ -1,65 +1,249 @@
 # =============================================================================
-# 应用商店数据源
+# 软件中心数据源
 # 放在「站点根目录」的 data/apps.yaml，主题的 /apps/ 页面会自动读取
 # =============================================================================
 #
-# 应用字段说明：
+# 应用字段：
 #   name      必填  应用名称
-#   summary   必填  一句话简介，卡片内最多显示两行
-#   site      必填  官网下载页地址 → 渲染「前往官网」按钮
-#   download  选填  文件直链       → 渲染「直接下载」按钮；留空则只显示官网按钮
-#   platform  选填  平台，如 Windows / macOS / 跨平台
-#   version   选填  版本号，与 platform 一同显示在名称下方
-#   icon      选填  图标路径，如 /icons/vscode.svg；留空回退为首字母方块
+#   summary   必填  一句话简介，卡片内最多两行
+#   site      必填  官网地址 → 「前往官网」按钮
+#   icon      选填  图标路径，如 /icons/vscode.png；留空回退首字母
+#   platforms 必填  平台列表，每项含 os 与 url
+#     os      平台名，用于卡片标签与下载菜单：Windows / macOS / Linux
+#     url     该平台的下载地址（安装包直链或官方下载页）
 #
-# 关于 download 字段的三种填法：
-#   1. 固定直链：https://example.com/app-1.2.3-x64.exe
-#   2. 跳转链接：https://example.com/download/latest  （浏览器自动跟随 302）
-#   3. 开源项目：https://github.com/owner/repo/releases/latest
-#      固定文件名可用 https://github.com/owner/repo/releases/latest/download/<文件名>
-# 不确定时请留空 —— 只显示官网按钮，好过给出失效链接。
+# 下载按钮的行为：
+#   单个平台  → 按钮直接跳转该平台地址
+#   多个平台  → 按钮悬浮展开平台菜单，点选后跳转
 # =============================================================================
 
 groups:
-  - name: 开发工具
+  - name: 压缩软件
+    apps:
+      - name: 7-Zip
+        summary: 高压缩率的开源压缩工具，支持 7z、ZIP、RAR 等主流格式，体积小巧、无广告捆绑。
+        site: https://www.7-zip.org/
+        icon: /icons/7zip.svg
+        platforms:
+          - os: Windows
+            url: https://www.7-zip.org/download.html
+
+      - name: MacZip
+        summary: 为 macOS 打造的压缩解压工具，支持 RAR、7z、ZIP 等格式，可预览压缩包内文件。
+        site: https://maczip.cn/
+        icon: /icons/maczip.png
+        platforms:
+          - os: macOS
+            url: https://maczip.cn/
+
+  - name: 轻量代码编辑器
     apps:
       - name: Visual Studio Code
-        summary: 微软出品的免费代码编辑器，扩展生态丰富，内置 Git 与调试器，支持几乎所有主流语言。
+        summary: 微软出品的免费代码编辑器，扩展生态丰富，内置 Git、调试器与终端，支持几乎所有主流语言。
         site: https://code.visualstudio.com/
-        download: https://update.code.visualstudio.com/latest/win32-x64-user/stable
-        platform: Windows
-        version: 最新稳定版
-        icon: /icons/code.svg
-      - name: Git for Windows
-        summary: Windows 平台的 Git 客户端，附带 Git Bash 与图形化工具，版本控制必备。
-        site: https://git-scm.com/download/win
-        platform: Windows
-      - name: Windows Terminal
-        summary: 现代化终端应用，支持多标签、分屏、GPU 加速渲染与高度自定义主题。
-        site: https://github.com/microsoft/terminal/releases
+        icon: /icons/vscode.png
+        platforms:
+          - os: Windows
+            url: https://update.code.visualstudio.com/latest/win32-x64-user/stable
+          - os: macOS
+            url: https://update.code.visualstudio.com/latest/darwin/stable
+          - os: Linux
+            url: https://update.code.visualstudio.com/latest/linux-x64/stable
 
-  - name: 效率工具
-    apps:
-      - name: Everything
-        summary: 基于 NTFS 索引的极速文件搜索工具，百万级文件秒级定位，常驻内存极低。
-        site: https://www.voidtools.com/downloads/
-        platform: Windows
-      - name: PowerToys
-        summary: 微软官方出品的系统增强套件，内含窗口布局、批量重命名、取色器等十余个实用模块。
-        site: https://github.com/microsoft/PowerToys/releases
-        platform: Windows
-      - name: 7-Zip
-        summary: 开源压缩软件，支持 7z、ZIP、RAR 等主流格式，压缩率高且完全免费。
-        site: https://www.7-zip.org/download.html
-        platform: 跨平台
+      - name: VSCodium
+        summary: VS Code 的社区构建版本，移除微软遥测与品牌授权限制，代码开源、隐私友好。
+        site: https://vscodium.com/
+        icon: /icons/vscodium.png
+        platforms:
+          - os: Windows
+            url: https://vscodium.com/
+          - os: macOS
+            url: https://vscodium.com/
+          - os: Linux
+            url: https://vscodium.com/
 
-  - name: 设计与写作
+  - name: 浏览器
     apps:
-      - name: Figma
-        summary: 浏览器端协作式界面设计工具，多人实时编辑，组件与设计规范管理能力强。
-        site: https://www.figma.com/downloads/
-        platform: 跨平台
-      - name: Obsidian
-        summary: 基于本地 Markdown 文件的笔记工具，双向链接构建知识网络，数据完全自主掌控。
-        site: https://obsidian.md/download
-        platform: 跨平台
+      - name: Google Chrome
+        summary: 市场占有率最高的浏览器，V8 引擎性能强劲，扩展与开发者工具生态成熟。
+        site: https://www.google.com/chrome/
+        icon: /icons/chrome.svg
+        platforms:
+          - os: Windows
+            url: https://dl.google.com/chrome/install/latest/chrome_installer.exe
+          - os: macOS
+            url: https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg
+          - os: Linux
+            url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+      - name: Ungoogled Chromium
+        summary: 移除全部 Google 服务集成的 Chromium 分支，默认无遥测、无自动更新，可自行接入扩展源。
+        site: https://github.com/ungoogled-software/ungoogled-chromium
+        icon: /icons/ungoogled.png
+        platforms:
+          - os: Windows
+            url: https://github.com/ungoogled-software/ungoogled-chromium-binaries/releases
+          - os: macOS
+            url: https://github.com/ungoogled-software/ungoogled-chromium-binaries/releases
+          - os: Linux
+            url: https://github.com/ungoogled-software/ungoogled-chromium-binaries/releases
+
+      - name: Firefox
+        summary: Mozilla 出品的独立浏览器，Gecko 内核，扩展自由度与隐私保护是其长期立足点。
+        site: https://www.firefox.com/
+        icon: /icons/firefox.png
+        platforms:
+          - os: Windows
+            url: https://www.firefox.com/download/
+          - os: macOS
+            url: https://www.firefox.com/download/
+          - os: Linux
+            url: https://www.firefox.com/download/
+
+      - name: LibreWolf
+        summary: 基于 Firefox 的隐私加固分支，默认启用严格跟踪保护、uBlock Origin 与反指纹配置。
+        site: https://librewolf.net/
+        icon: /icons/librewolf.ico
+        platforms:
+          - os: Windows
+            url: https://librewolf.net/installation/
+          - os: macOS
+            url: https://librewolf.net/installation/
+          - os: Linux
+            url: https://librewolf.net/installation/
+
+  - name: AI Agent
+    apps:
+      - name: WorkBuddy
+        summary: 腾讯出品的全场景 AI 办公工作台，自主规划并调用工具、生成文件，打通腾讯办公生态。
+        site: https://www.workbuddy.cn/
+        icon: /icons/workbuddy.svg
+        platforms:
+          - os: Windows
+            url: https://www.workbuddy.cn/
+          - os: macOS
+            url: https://www.workbuddy.cn/
+          - os: Linux
+            url: https://www.workbuddy.cn/
+
+      - name: DeepSeek Harness
+        summary: DeepSeek 开源的 Agent 运行框架，一切皆插件，桌面端开箱即用，亦可经 npx 启动本地 Web UI。
+        site: https://www.deepseek.com/harness/
+        icon: /icons/deepseek.svg
+        platforms:
+          - os: Windows
+            url: https://www.deepseek.com/harness/
+          - os: macOS
+            url: https://www.deepseek.com/harness/
+          - os: Linux
+            url: https://www.deepseek.com/harness/
+
+  - name: SSH 工具
+    apps:
+      - name: MobaXterm
+        summary: Windows 平台的多功能终端，内置 SSH、SFTP、X11 转发与串口调试，便携版免安装。
+        site: https://mobaxterm.mobatek.net/
+        icon: /icons/mobaxterm.ico
+        platforms:
+          - os: Windows
+            url: https://mobaxterm.mobatek.net/download-home-edition.html
+
+      - name: Tabby
+        summary: 现代化跨平台终端模拟器，支持多标签、分屏、SSH 会话管理与插件扩展，界面高度可定制。
+        site: https://tabby.sh/
+        icon: /icons/tabby.png
+        platforms:
+          - os: Windows
+            url: https://github.com/Eugeny/tabby/releases/latest
+          - os: macOS
+            url: https://github.com/Eugeny/tabby/releases/latest
+          - os: Linux
+            url: https://github.com/Eugeny/tabby/releases/latest
+
+  - name: 下载工具
+    apps:
+      - name: qBittorrent
+        summary: 开源 BitTorrent 客户端，无广告与捆绑，内置搜索插件、RSS 订阅与 Web 控制台。
+        site: https://www.qbittorrent.org/
+        icon: /icons/qbittorrent.png
+        platforms:
+          - os: Windows
+            url: https://www.qbittorrent.org/download
+          - os: macOS
+            url: https://www.qbittorrent.org/download
+          - os: Linux
+            url: https://www.qbittorrent.org/download
+
+      - name: Motrix
+        summary: 基于 aria2 的下载管理器，支持 HTTP、BT、磁力与迅雷链接，界面清爽。
+        site: https://motrix.app/
+        icon: /icons/motrix.ico
+        platforms:
+          - os: Windows
+            url: https://github.com/agalwood/Motrix/releases/latest
+          - os: macOS
+            url: https://github.com/agalwood/Motrix/releases/latest
+          - os: Linux
+            url: https://github.com/agalwood/Motrix/releases/latest
+
+  - name: 文献管理
+    apps:
+      - name: Zotero
+        summary: 开源文献管理工具，一键抓取网页文献信息，支持标签、笔记与 Word 引用插件。
+        site: https://www.zotero.org/
+        icon: /icons/zotero.png
+        platforms:
+          - os: Windows
+            url: https://www.zotero.org/download/
+          - os: macOS
+            url: https://www.zotero.org/download/
+          - os: Linux
+            url: https://www.zotero.org/download/
+
+  - name: 写盘工具
+    apps:
+      - name: balenaEtcher
+        summary: 跨平台镜像写入工具，界面三步完成 U 盘烧录，自动校验写入结果，防止烧录失败。
+        site: https://etcher.balena.io/
+        icon: /icons/etcher.png
+        platforms:
+          - os: Windows
+            url: https://github.com/balena-io/etcher/releases/latest
+          - os: macOS
+            url: https://github.com/balena-io/etcher/releases/latest
+          - os: Linux
+            url: https://github.com/balena-io/etcher/releases/latest
+
+      - name: Rufus
+        summary: Windows 平台轻量写盘工具，支持 UEFI 与 GPT，可制作 Windows 与 Linux 启动盘。
+        site: https://rufus.ie/
+        icon: /icons/rufus.png
+        platforms:
+          - os: Windows
+            url: https://github.com/pbatard/rufus/releases/latest
+
+  - name: 聊天工具
+    apps:
+      - name: 微信
+        summary: 腾讯出品的即时通讯工具，覆盖聊天、支付、小程序与公众号生态，桌面端支持文件传输。
+        site: https://weixin.qq.com/
+        icon: /icons/wechat.svg
+        platforms:
+          - os: Windows
+            url: https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe
+          - os: macOS
+            url: https://weixin.qq.com/
+          - os: Linux
+            url: https://weixin.qq.com/
+
+      - name: QQ
+        summary: 腾讯的即时通讯客户端，NT 架构重写后支持多端同步，群组与文件传输能力突出。
+        site: https://im.qq.com/
+        icon: /icons/qq.svg
+        platforms:
+          - os: Windows
+            url: https://im.qq.com/pcqq
+          - os: macOS
+            url: https://im.qq.com/pcqq
+          - os: Linux
+            url: https://im.qq.com/pcqq

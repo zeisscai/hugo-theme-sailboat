@@ -25,7 +25,7 @@ hasCJKLanguage = true
   url = "/"
   weight = 1
 [[menus.main]]
-  name = "应用"
+  name = "软件中心"
   url = "/apps/"
   weight = 2
 [[menus.main]]

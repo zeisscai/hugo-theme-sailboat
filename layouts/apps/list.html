@@ -1,6 +1,8 @@
 {{ define "head-extra" }}
   {{- $css := resources.Get "css/apps.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  {{- $js := resources.Get "js/apps.js" | minify | fingerprint }}
+  <script defer src="{{ $js.RelPermalink }}"></script>
 {{ end }}
 
 {{ define "main" }}

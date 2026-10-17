@@ -1,6 +1,7 @@
-{{- $meta := slice -}}
-{{- with .platform }}{{ $meta = $meta | append . }}{{ end -}}
-{{- with .version }}{{ $meta = $meta | append . }}{{ end -}}
+{{- $platforms := .platforms | default slice -}}
+{{- $urls := slice -}}
+{{- range $platforms }}{{ $urls = $urls | append .url }}{{ end -}}
+{{- $multi := gt (len ($urls | uniq)) 1 -}}
 <article class="app-card card glass">
   <div class="app-card-head">
     {{- with .icon }}
@@ -10,14 +11,35 @@
     {{- end }}
     <div class="app-card-title">
       <h3 class="app-name">{{ .name }}</h3>
-      {{- with $meta }}<p class="app-meta">{{ delimit . " · " }}</p>{{ end }}
+      {{- with $platforms }}
+      <ul class="app-os">
+        {{- range . }}<li class="os-tag">{{ .os }}</li>{{ end }}
+      </ul>
+      {{- end }}
     </div>
   </div>
+
   {{- with .summary }}<p class="app-summary">{{ . }}</p>{{ end }}
+
   <div class="app-actions">
-    {{- with .download }}
-    <a class="btn btn-primary btn-sm" href="{{ . }}" rel="noopener">直接下载</a>
+    {{- if $platforms }}
+      {{- if $multi }}
+      <div class="app-dl">
+        <button class="btn btn-primary btn-sm app-dl-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          直接下载
+          <svg class="app-dl-caret" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M6 9.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="app-dl-menu" role="menu">
+          {{- range $platforms }}
+          <a class="app-dl-item" href="{{ .url }}" role="menuitem" rel="noopener">{{ .os }}</a>
+          {{- end }}
+        </div>
+      </div>
+      {{- else }}
+      <a class="btn btn-primary btn-sm" href="{{ (index $platforms 0).url }}" rel="noopener">直接下载</a>
+      {{- end }}
     {{- end }}
+
     {{- with .site }}
     <a class="btn btn-ghost btn-sm" href="{{ . }}" target="_blank" rel="noopener">前往官网</a>
     {{- end }}
